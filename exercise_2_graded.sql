@@ -5,6 +5,66 @@
  Insert some values into the medication_stock table. 
  Practice SQL with the following:
  */
+CREATE TABLE doctors (
+    doctor_id SERIAL PRIMARY KEY,
+    name TEXT NOT NULL,
+    specialization TEXT NOT NULL
+);
+CREATE TABLE patients (
+    patient_id SERIAL PRIMARY KEY,
+    name TEXT NOT NULL,
+    age INT NOT NULL,
+    room_no INT NOT NULL,
+    doctor_id INT REFERENCES doctors(doctor_id)
+);
+create table nurses (
+    nurse_id SERIAL PRIMARY KEY,
+    nurse_name TEXT NOT NULL,
+    nurse_shift TEXT NOT NULL
+);
+CREATE TABLE treatments (
+    treatment_id SERIAL PRIMARY KEY,
+    patient_id INT REFERENCES patients(patient_id),
+    nurse_id INT REFERENCES nurses(nurse_id),
+    treatment_type TEXT NOT NULL,
+    treatment_time TIMESTAMP NOT NULL
+);
+CREATE TABLE sensors (
+    sensor_id SERIAL PRIMARY KEY,
+    patient_id INT REFERENCES patients(patient_id),
+    sensor_type TEXT NOT NULL,
+    reading NUMERIC NOT NULL,
+    reading_time TIMESTAMP NOT NULL
+);
+INSERT INTO doctors (name, specialization) VALUES
+('Dr. Smith', 'Geriatrics'),
+('Dr. Johnson', 'Cardiology'),
+('Dr. Lee', 'Neurology'),
+('Dr. Patel', 'Endocrinology'),
+('Dr. Adams', 'General Medicine');
+INSERT INTO nurses (nurse_name, nurse_shift) VALUES
+('Nurse Ann', 'Morning'),
+('Nurse Ben', 'Evening'),
+('Nurse Eva', 'Night'),
+('Nurse Kim', 'Morning'),
+('Nurse Omar', 'Evening');
+INSERT INTO patients (name, age, room_no, doctor_id) 
+VALUES
+('Alice', 82, 101, 11),
+('Bob', 79, 102, 12),
+('Carol', 85, 103, 11),
+('David', 88, 104, 13),
+('Ella', 77, 105, 12),
+('Frank', 91, 106, 14);
+INSERT INTO treatments (patient_id, nurse_id, treatment_type, treatment_time) VALUES
+(19, 6, 'Physiotherapy', '2025-09-10 09:00:00'),
+(20, 7, 'Medication', '2025-09-10 18:00:00'),
+(19, 8, 'Medication', '2025-09-11 21:00:00'),
+(21, 6, 'Checkup', '2025-09-12 10:00:00'),
+(22, 7, 'Physiotherapy', '2025-09-12 17:00:00'),
+(23, 10, 'Medication', '2025-09-12 18:00:00'),
+(24, 9, 'Physiotherapy', '2025-09-13 09:00:00');
+
 
 CREATE TABLE medication_stock (
     medication_id INT PRIMARY KEY,
@@ -19,6 +79,8 @@ INSERT INTO medication_stock (medication_id, medication_name, quantity) VALUES
 (3, 'Lisinopril', 80),
 (4, 'Atorvastatin', 120),
 (5, 'Insulin', 50);
+
+
  -- Q!: List all patients name and ages 
 SELECT name AS patient_name, age AS patient_age
 FROM patients;
